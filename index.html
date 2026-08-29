@@ -1,19 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Metadata and Viewport Settings -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bachir's Portfolio</title>
+    <style>
+        /* Base Styling */
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            padding: 20px;
+        }
+        
+        .feature-box {
+            border: 2px solid #0056b3;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        /* Dark Mode Classes */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        
+        body.dark-mode .feature-box {
+            background-color: #1e1e1e;
+            border-color: #66b2ff;
+        }
+        
+        body.dark-mode a {
+            color: #66b2ff;
+        }
+    </style>
 </head>
 <body>
-    <!-- Dynamic Welcome Message Container -->
+
+    <!-- Dark Mode Slider/Checkbox -->
+    <div style="text-align: right; margin-bottom: 20px;">
+        <label for="darkModeToggle">
+            <input type="checkbox" id="darkModeToggle"> <strong>Dark Mode</strong>
+        </label>
+    </div>
+
     <h1 id="welcomeMessage">Welcome to My Portfolio</h1>
 
-    <!-- Navigation Menu -->
     <nav>
         <ul>
             <li><a href="#about">About</a></li>
+            <li><a href="#featured-content">Featured Content</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -23,22 +60,37 @@
         <!-- About Section -->
         <section id="about">
             <h2>About Me</h2>
-            <p>Hello! I am Bachir Niang, a student at ECPI University</p>
+            <p>Hello! I am Bachir, a student at ECPI University.</p>
+            
+            <h3>My Skills</h3>
+            <!-- The loop will inject list items here -->
+            <ul id="skillsList"></ul>
+        </section>
+
+        <!-- Featured Content Section -->
+        <section id="featured-content">
+            <h2>Featured Content</h2>
+            
+            <div id="uniResources" class="feature-box">
+                <h3>University Resources</h3>
+                <a href="https://www.ecpi.edu" target="_blank">ECPI Program Home Page</a>
+            </div>
+            
+            <div id="personalProjects" class="feature-box">
+                <h3>Personal Projects</h3>
+                <a href="https://github.com/bacnia1464/bacnia1464.github.io" target="_blank">
+                    <img src="https://via.placeholder.com/150?text=Health+&+Fitness" alt="Health and Fitness Repo">
+                </a>
+            </div>
         </section>
 
         <!-- Projects Section -->
         <section id="projects">
             <h2>My Projects</h2>
-            <p>Select an image below to view my previous GitHub repositories:</p>
-            
-            <!-- Image links to completed GitHub projects -->
-            <a href="https://github.com/bacnia1464/bacnia1464.github.io" target="_blank">
-                <img src="https://via.placeholder.com/150?text=Health+&+Fitness" alt="Health and Fitness Web Application">
-            </a>
-            <a href="https://github.com/bacnia1464/sdc260-midterm" target="_blank">
+            <a href="https://github.com/bacnia1464/sdc260-midterm" class="project-link" target="_blank">
                 <img src="https://via.placeholder.com/150?text=SDC260+Midterm" alt="SDC260 Midterm Project">
             </a>
-            <a href="https://github.com/bacnia1464/web-design-blog" target="_blank">
+            <a href="https://github.com/bacnia1464/web-design-blog" class="project-link" target="_blank">
                 <img src="https://via.placeholder.com/150?text=Web+Design+Blog" alt="Web Design Blog">
             </a>
         </section>
@@ -46,34 +98,74 @@
         <!-- Contact Section -->
         <section id="contact">
             <h2>Contact Me</h2>
-            <p>Feel free to reach out using the form below:</p>
-            <form action="#" method="POST">
+            <form id="contactForm" action="#" method="POST">
                 <label for="senderName">Name:</label>
                 <input type="text" id="senderName" name="senderName" required><br><br>
 
                 <label for="address">Address / Email:</label>
                 <input type="text" id="address" name="address" required><br><br>
 
-                <label for="subject">Subject:</label>
-                <input type="text" id="subject" name="subject" required><br><br>
-
                 <label for="message">Message:</label><br>
                 <textarea id="message" name="message" rows="4" required></textarea><br><br>
 
-                <button type="submit">Submit</button>
+                <!-- Ensure button is selected by the event listener -->
+                <button type="submit" id="submitBtn">Submit</button>
             </form>
         </section>
     </main>
 
-    <!-- JavaScript Implementation -->
     <script>
-        // Prompt the user for their name and store it in a variable
-        let visitorName = prompt("Welcome! Please enter your name:");
+        
+        // Implement a Loop (Dynamic Content)
+        const skillsArray = ["HTML", "CSS", "JavaScript", "Oracle SQL", "Git & GitHub"];
+        const skillsList = document.getElementById("skillsList");
+        
+        skillsArray.forEach(function(skill) {
+            let listItem = document.createElement("li");
+            listItem.textContent = skill;
+            skillsList.appendChild(listItem);
+        });
 
-        // Dynamically update the H1 element to include the user's input
-        if (visitorName) {
-            document.getElementById("welcomeMessage").textContent = "Welcome, " + visitorName + ", to Bachir's Portfolio!";
+        // Add Conditional Logic
+        const projectLinks = document.querySelectorAll(".project-link"); // Counts items with this class
+        const uniResourcesDiv = document.getElementById("uniResources");
+        const personalProjectsDiv = document.getElementById("personalProjects");
+
+        if (projectLinks.length < 3) {
+            // Show both if fewer than 3 projects
+            uniResourcesDiv.style.display = "block";
+            personalProjectsDiv.style.display = "block";
+        } else {
+            // Hide university resources if 3 or more projects
+            uniResourcesDiv.style.display = "none";
+            personalProjectsDiv.style.display = "block";
         }
+
+        // Add a Dark Mode Slider
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        
+        darkModeToggle.addEventListener("change", function() {
+            // Toggles the dark-mode class on the body element
+            document.body.classList.toggle("dark-mode");
+        });
+
+        // Add Interactivity to Form Submit
+        const submitBtn = document.getElementById("submitBtn");
+        
+        submitBtn.addEventListener("click", function(event) {
+            // Prevents the form from refreshing the page
+            event.preventDefault(); 
+            
+            // Gets the value inputted by the user
+            const userName = document.getElementById("senderName").value;
+            
+            // Checks if name field has text, then alerts
+            if (userName) {
+                alert("Thank you, " + userName + ", your message has been sent!");
+            } else {
+                alert("Please enter your name before submitting.");
+            }
+        });
     </script>
 </body>
 </html>
