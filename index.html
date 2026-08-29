@@ -20,7 +20,6 @@
             background-color: #f8f9fa;
         }
 
-        /* Persistent Storage: Dark Mode Classes */
         body.dark-mode {
             background-color: #121212;
             color: #ffffff;
@@ -35,7 +34,6 @@
             color: #66b2ff;
         }
 
-        /* Notification Styling */
         .notification {
             background-color: #d4edda;
             color: #155724;
@@ -52,83 +50,36 @@
             color: #a3cfbb;
         }
 
-        #formStatus {
-            margin-top: 15px;
-            font-weight: bold;
-        }
+        #formStatus { margin-top: 15px; font-weight: bold; }
 
-        /* Persistent Storage: Modal Styling */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Slight transparency */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
         }
 
         .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            color: #000;
+            background-color: white; padding: 30px; border-radius: 8px;
+            text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); color: #000;
         }
 
         body.dark-mode .modal-content {
-            background-color: #1e1e1e;
-            color: #fff;
-            border: 1px solid #444;
+            background-color: #1e1e1e; color: #fff; border: 1px solid #444;
         }
 
         #closeModalBtn {
-            margin-top: 15px;
-            padding: 8px 16px;
-            cursor: pointer;
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            border-radius: 4px;
+            margin-top: 15px; padding: 8px 16px; cursor: pointer;
+            background-color: #0056b3; color: white; border: none; border-radius: 4px;
         }
-
-        /* Persistent Storage Tooltip Styling */
-        .tooltip-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip-container .tooltip-text {
-            visibility: hidden;
-            width: 180px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 5px;
-            padding: 6px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%; 
-            left: 50%;
-            margin-left: -90px; 
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.9em;
-        }
-
-        .tooltip-container:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
+        
+        /* Project card styling */
+        .project-card img {
+            display: block; margin-top: 10px; max-width: 100%; height: auto;
         }
     </style>
 </head>
 <body>
 
-    <!-- Custom Welcome Modal -->
     <div id="welcomeModal" class="modal-overlay">
         <div class="modal-content">
             <h2>Notice</h2>
@@ -137,7 +88,6 @@
         </div>
     </div>
 
-    <!-- Dark Mode Slider/Checkbox -->
     <div style="text-align: right; margin-bottom: 20px;">
         <label for="darkModeToggle">
             <input type="checkbox" id="darkModeToggle"> <strong>Dark Mode</strong>
@@ -149,14 +99,12 @@
     <nav>
         <ul>
             <li><a href="#about">About</a></li>
-            <li><a href="#featured-content">Featured Content</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
 
     <main>
-        <!-- About Section -->
         <section id="about">
             <h2>About Me</h2>
             <p>Hello! I am Bachir, a student at ECPI University studying software engineering.</p>
@@ -164,31 +112,13 @@
             <ul id="skillsList"></ul>
         </section>
 
-        <!-- Featured Content Section -->
-        <section id="featured-content">
-            <h2>Featured Content</h2>
-            <div id="uniResources" class="feature-box">
-                <h3>University Resources</h3>
-                <a href="https://www.ecpi.edu" target="_blank">ECPI Program Home Page</a>
-            </div>
-            
-            <div id="personalProjects" class="feature-box">
-                <h3>Personal Projects</h3>
-                <a href="https://github.com/bacnia1464/bacnia1464.github.io" target="_blank">
-                    <img src="https://via.placeholder.com/150?text=Health+&+Fitness" alt="Health and Fitness Repo">
-                </a>
-            </div>
-        </section>
-
         <!-- Projects Section -->
         <section id="projects">
             <h2>My Projects</h2>
-            <a href="https://github.com/bacnia1464/web-design-blog" class="project-link" target="_blank">
-                <img src="https://via.placeholder.com/150?text=Web+Design+Blog" alt="Web Design Blog">
-            </a>
+            <!-- Empty container for dynamically rendered projects -->
+            <div id="projectContainer"></div>
         </section>
 
-        <!-- Contact Section -->
         <section id="contact">
             <h2>Contact Me</h2>
             <form id="contactForm" action="#" method="POST">
@@ -201,39 +131,81 @@
                 <label for="message">Message:</label><br>
                 <textarea id="message" name="message" rows="4" required></textarea><br><br>
 
-                <!-- Tooltip Container for Submit Button -->
-                <div class="tooltip-container">
-                    <button type="submit" id="submitBtn">Submit</button>
-                    <span class="tooltip-text">Click to send your message!</span>
-                </div>
-                
-                <!-- Status container for form submissions -->
+                <button type="submit" id="submitBtn">Submit</button>
                 <div id="formStatus"></div>
             </form>
         </section>
     </main>
 
     <script>
+        // Scalable Foundations Objects, Arrays, sessionStorage, DOM Rendering      
+        // Define array of JavaScript objects containing project data
+        const projectDataArray = [
+            {
+                title: "Health and Fitness Web Application",
+                summary: "A comprehensive health and fitness tracking web application utilizing HTML, CSS, and XAMPP Apache.",
+                image: "https://via.placeholder.com/150?text=Health+&+Fitness",
+                link: "https://github.com/bacnia1464/bacnia1464.github.io"
+            },
+            {
+                title: "Web Design Blog",
+                summary: "A personal blog project exploring front-end web design principles.",
+                image: "https://via.placeholder.com/150?text=Web+Design+Blog",
+                link: "https://github.com/bacnia1464/web-design-blog"
+            }
+        ];
+
+        // Check sessionStorage and store/retrieve data
+        if (!sessionStorage.getItem("portfolioProjects")) {
+            // Convert array to string and store if it doesn't exist
+            sessionStorage.setItem("portfolioProjects", JSON.stringify(projectDataArray));
+        }
         
-        // Modal Dismissal
-        const modal = document.getElementById("welcomeModal");
-        const closeBtn = document.getElementById("closeModalBtn");
-        
-        // Hides the modal overlay when the close button is clicked
-        closeBtn.addEventListener("click", () => {
-            modal.style.display = "none";
+        // Retrieve and parse data from sessionStorage
+        const storedProjects = JSON.parse(sessionStorage.getItem("portfolioProjects"));
+
+        // Render projects dynamically
+        const projectContainer = document.getElementById("projectContainer");
+
+        storedProjects.forEach(project => {
+            // Create DOM elements
+            const cardDiv = document.createElement("div");
+            cardDiv.className = "feature-box project-card";
+
+            const projectTitle = document.createElement("h3");
+            projectTitle.textContent = project.title;
+
+            const projectSummary = document.createElement("p");
+            projectSummary.textContent = project.summary;
+
+            const projectLink = document.createElement("a");
+            projectLink.href = project.link;
+            projectLink.target = "_blank";
+
+            const projectImage = document.createElement("img");
+            projectImage.src = project.image;
+            projectImage.alt = project.title;
+
+            // Assemble the elements
+            projectLink.appendChild(projectImage);
+            cardDiv.appendChild(projectTitle);
+            cardDiv.appendChild(projectSummary);
+            cardDiv.appendChild(projectLink);
+
+            // Append to the DOM container
+            projectContainer.appendChild(cardDiv);
         });
 
-        // Persist Dark Mode Preference
+        const modal = document.getElementById("welcomeModal");
+        const closeBtn = document.getElementById("closeModalBtn");
+        closeBtn.addEventListener("click", () => { modal.style.display = "none"; });
+
         const darkModeToggle = document.getElementById("darkModeToggle");
-        
-        // On page load, check localStorage for existing preference
         if (localStorage.getItem("themePreference") === "dark") {
             document.body.classList.add("dark-mode");
-            darkModeToggle.checked = true; // Update toggle state
+            darkModeToggle.checked = true; 
         }
 
-        // Event listener to toggle theme and save preference to localStorage
         darkModeToggle.addEventListener("change", function() {
             if (this.checked) {
                 document.body.classList.add("dark-mode");
@@ -244,58 +216,27 @@
             }
         });
 
-        // DOM Elements, Timing, Logic
         const skillsArray = ["HTML", "CSS", "JavaScript", "Oracle SQL", "Git & GitHub"];
         const skillsList = document.getElementById("skillsList");
-        
         skillsArray.forEach(function(skill) {
             let listItem = document.createElement("li");
             listItem.textContent = skill;
             skillsList.appendChild(listItem);
         });
 
-        const projectLinks = document.querySelectorAll(".project-link"); 
-        const uniResourcesDiv = document.getElementById("uniResources");
-        const personalProjectsDiv = document.getElementById("personalProjects");
-
-        if (projectLinks.length < 3) {
-            uniResourcesDiv.style.display = "block";
-            personalProjectsDiv.style.display = "block";
-        } else {
-            uniResourcesDiv.style.display = "none";
-            personalProjectsDiv.style.display = "block";
-        }
-
         const notificationBar = document.createElement("div");
         notificationBar.className = "notification";
-        notificationBar.textContent = "Welcome! Check out my newly added Health & Fitness Web App below.";
-        
+        notificationBar.textContent = "Welcome! My project data is now dynamically loaded from Session Storage.";
         const mainHeader = document.querySelector("#welcomeMessage");
         mainHeader.insertAdjacentElement("afterend", notificationBar);
-        
-        setTimeout(() => {
-            notificationBar.style.display = "block";
-        }, 1500);
-
-        const welcomeHeader = document.getElementById("welcomeMessage");
-        welcomeHeader.style.borderBottom = "3px solid #0056b3";
-        welcomeHeader.style.display = "inline-block";
-        welcomeHeader.style.paddingBottom = "5px";
-
-        const aboutSection = document.querySelector("#about");
-        aboutSection.style.backgroundColor = "rgba(0, 86, 179, 0.05)"; 
-        aboutSection.style.padding = "15px";
-        aboutSection.style.borderRadius = "8px";
-        aboutSection.style.border = "1px solid #ccc";
+        setTimeout(() => { notificationBar.style.display = "block"; }, 1500);
 
         const contactForm = document.getElementById("contactForm");
         const formStatus = document.getElementById("formStatus");
-        
         contactForm.addEventListener("submit", function(event) {
             event.preventDefault(); 
             formStatus.style.color = "#0056b3";
             formStatus.textContent = "Sending message...";
-            
             setTimeout(() => {
                 formStatus.style.color = "green";
                 formStatus.textContent = "Message sent successfully!";
