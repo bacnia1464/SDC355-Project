@@ -34,6 +34,29 @@
         body.dark-mode a {
             color: #66b2ff;
         }
+
+        /* Dynamic Notification Styling */
+        .notification {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none; /* Hidden by default until JavaScript shows it */
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        body.dark-mode .notification {
+            background-color: #1a4d2e;
+            color: #a3cfbb;
+        }
+
+        /* Form Status Message Styling */
+        #formStatus {
+            margin-top: 15px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -63,14 +86,12 @@
             <p>Hello! I am Bachir, a student at ECPI University.</p>
             
             <h3>My Skills</h3>
-            <!-- The loop will inject list items here -->
             <ul id="skillsList"></ul>
         </section>
 
         <!-- Featured Content Section -->
         <section id="featured-content">
             <h2>Featured Content</h2>
-            
             <div id="uniResources" class="feature-box">
                 <h3>University Resources</h3>
                 <a href="https://www.ecpi.edu" target="_blank">ECPI Program Home Page</a>
@@ -87,7 +108,7 @@
         <!-- Projects Section -->
         <section id="projects">
             <h2>My Projects</h2>
-            <a href="https://github.com/bacnia1464/sdc260-midterm" class="project-link" target="_blank">
+            <a href="url?id=42/sdc260-midterm" class="project-link" target="_blank">
                 <img src="https://via.placeholder.com/150?text=SDC260+Midterm" alt="SDC260 Midterm Project">
             </a>
             <a href="https://github.com/bacnia1464/web-design-blog" class="project-link" target="_blank">
@@ -108,15 +129,17 @@
                 <label for="message">Message:</label><br>
                 <textarea id="message" name="message" rows="4" required></textarea><br><br>
 
-                <!-- Ensure button is selected by the event listener -->
                 <button type="submit" id="submitBtn">Submit</button>
+                
+                <!-- Status container for form submissions -->
+                <div id="formStatus"></div>
             </form>
         </section>
     </main>
 
     <script>
-        
-        // Implement a Loop (Dynamic Content)
+
+        // Variables, Loops, Conditionals Logic
         const skillsArray = ["HTML", "CSS", "JavaScript", "Oracle SQL", "Git & GitHub"];
         const skillsList = document.getElementById("skillsList");
         
@@ -126,45 +149,77 @@
             skillsList.appendChild(listItem);
         });
 
-        // Add Conditional Logic
-        const projectLinks = document.querySelectorAll(".project-link"); // Counts items with this class
+        const projectLinks = document.querySelectorAll(".project-link"); 
         const uniResourcesDiv = document.getElementById("uniResources");
         const personalProjectsDiv = document.getElementById("personalProjects");
 
         if (projectLinks.length < 3) {
-            // Show both if fewer than 3 projects
             uniResourcesDiv.style.display = "block";
             personalProjectsDiv.style.display = "block";
         } else {
-            // Hide university resources if 3 or more projects
             uniResourcesDiv.style.display = "none";
             personalProjectsDiv.style.display = "block";
         }
 
-        // Add a Dark Mode Slider
         const darkModeToggle = document.getElementById("darkModeToggle");
-        
         darkModeToggle.addEventListener("change", function() {
-            // Toggles the dark-mode class on the body element
             document.body.classList.toggle("dark-mode");
         });
 
-        // Add Interactivity to Form Submit
-        const submitBtn = document.getElementById("submitBtn");
+
+        // Dynamically Add a New Element
+        // Create a notification bar element
+        const notificationBar = document.createElement("div");
+        notificationBar.className = "notification";
+        notificationBar.textContent = "Welcome! Check out my newly added Health & Fitness Web App below.";
         
-        submitBtn.addEventListener("click", function(event) {
-            // Prevents the form from refreshing the page
+        // Append it just below the H1 element
+        const mainHeader = document.querySelector("#welcomeMessage");
+        mainHeader.insertAdjacentElement("afterend", notificationBar);
+        
+        // Use setTimeout to display the notification after a 1.5-second delay
+        setTimeout(() => {
+            notificationBar.style.display = "block";
+        }, 1500);
+
+
+        // Reference and Modify Existing Elements
+
+        // Select the H1 element and add a bottom border
+        const welcomeHeader = document.getElementById("welcomeMessage");
+        welcomeHeader.style.borderBottom = "3px solid #0056b3";
+        welcomeHeader.style.display = "inline-block";
+        welcomeHeader.style.paddingBottom = "5px";
+
+        // Select the About section and update its background color and padding
+        const aboutSection = document.querySelector("#about");
+        aboutSection.style.backgroundColor = "rgba(0, 86, 179, 0.05)"; // Light blue tint
+        aboutSection.style.padding = "15px";
+        aboutSection.style.borderRadius = "8px";
+        aboutSection.style.border = "1px solid #ccc";
+
+
+        // Timed Confirmation for Form Submission
+        const contactForm = document.getElementById("contactForm");
+        const formStatus = document.getElementById("formStatus");
+        
+        contactForm.addEventListener("submit", function(event) {
+            // Prevent default page reload
             event.preventDefault(); 
             
-            // Gets the value inputted by the user
-            const userName = document.getElementById("senderName").value;
+            // Display a loading message
+            formStatus.style.color = "#0056b3";
+            formStatus.textContent = "Sending message...";
             
-            // Checks if name field has text, then alerts
-            if (userName) {
-                alert("Thank you, " + userName + ", your message has been sent!");
-            } else {
-                alert("Please enter your name before submitting.");
-            }
+            // Use setTimeout to delay the confirmation message by 2 seconds
+            setTimeout(() => {
+                // Replace the loading message with the confirmation
+                formStatus.style.color = "green";
+                formStatus.textContent = "Message sent successfully!";
+                
+                // Clear the form fields after successful submission
+                contactForm.reset();
+            }, 2000);
         });
     </script>
 </body>
